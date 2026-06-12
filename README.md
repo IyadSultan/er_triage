@@ -9,10 +9,53 @@ app), and **deploy to Render in Lesson 7**.
 
 > ⚠️ Teaching app. Not for clinical use.
 
-## Run it locally (5 minutes)
+## Getting started — create a folder and clone the repo
+
+You need **Git** installed on your computer. If you don't have it yet, download it from
+<https://git-scm.com/downloads>.
+
+### 1. Create a working folder
+
+Pick a place on your computer where you keep coding projects (for example, a `projects`
+folder inside your home directory).
+
+**macOS / Linux (Terminal):**
 
 ```bash
+mkdir -p ~/projects
+cd ~/projects
+```
+
+**Windows (PowerShell or Command Prompt):**
+
+```powershell
+mkdir %USERPROFILE%\projects
+cd %USERPROFILE%\projects
+```
+
+> `mkdir` creates a new folder. `cd` moves you *into* that folder so the next commands
+> run in the right place.
+
+### 2. Clone the repository
+
+Copy the project from GitHub to your machine:
+
+```bash
+git clone https://github.com/IyadSultan/er_triage.git er_triage_app
 cd er_triage_app
+```
+
+> `git clone` downloads the repo. The last part (`er_triage_app`) is the local folder
+> name — it matches the layout described below.
+
+If Git asks you to sign in to GitHub, follow the prompts (a browser window or a
+personal access token, depending on your setup).
+
+## Run it locally (5 minutes)
+
+From inside the `er_triage_app` folder:
+
+```bash
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
