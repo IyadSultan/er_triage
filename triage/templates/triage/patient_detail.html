@@ -1,0 +1,56 @@
+{% extends "triage/base.html" %}
+{% block title %}Patient detail{% endblock %}
+
+{% block content %}
+<a href="{% url 'doctor_queue' %}" class="text-blue-700 hover:underline text-sm">&larr; Back to queue</a>
+
+<div class="grid md:grid-cols-3 gap-5 mt-3">
+  <div class="md:col-span-1 space-y-5">
+    <div class="rounded-lg shadow p-5 text-center
+      {% if event.acuity <= 2 %}bg-red-100{% elif event.acuity == 3 %}bg-yellow-100{% else %}bg-green-100{% endif %}">
+      <p class="uppercase text-xs">Acuity</p>
+      <p class="text-5xl font-bold">{{ event.acuity }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-5 text-sm">
+      <h2 class="font-semibold mb-2">Patient</h2>
+      <p>Name: {{ event.patient.name }}</p>
+      <p>MRN (encoded): <span class="font-mono text-xs">{{ event.patient.mrn_encoded }}</span></p>
+      <p>Age / sex: {{ event.patient.age }} / {{ event.patient.sex }}</p>
+      <p class="text-slate-400 mt-1">Arrived {{ event.timestamp }}</p>
+    </div>
+  </div>
+
+  <div class="md:col-span-2 space-y-5">
+    <div class="bg-white rounded-lg shadow p-5">
+      <h2 class="font-semibold mb-2">Nurse note</h2>
+      <p class="text-slate-700">{{ event.chief_complaint }}</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-5">
+      <h2 class="font-semibold mb-2">AI extraction
+        <span class="text-xs font-normal text-slate-400">(status: {{ event.extractor_status }})</span>
+      </h2>
+      {% if event.oncologic_emergency_flags %}
+        <div class="flex flex-wrap gap-2">
+          {% for flag in event.oncologic_emergency_flags %}
+            <span class="bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full">{{ flag }}</span>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-slate-500 text-sm">No oncologic emergency flags.</p>
+      {% endif %}
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-5 text-sm">
+      <h2 class="font-semibold mb-2">Vitals</h2>
+      <div class="grid grid-cols-3 gap-2 text-slate-700">
+        <p>HR: {{ event.vitals.hr }}</p>
+        <p>BP: {{ event.vitals.sbp }}/{{ event.vitals.dbp }}</p>
+        <p>RR: {{ event.vitals.rr }}</p>
+        <p>SpO₂: {{ event.vitals.spo2 }}%</p>
+        <p>Temp: {{ event.vitals.temp_c }}°C</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "triage/base.html" %}
+{% block title %}Doctor queue{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold">Triage queue</h1>
+  <a href="{% url 'nurse_form' %}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">+ New triage</a>
+</div>
+
+{% if events %}
+<div class="bg-white rounded-lg shadow overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-200 text-slate-600 text-left">
+      <tr>
+        <th class="px-4 py-2">Acuity</th>
+        <th class="px-4 py-2">MRN (encoded)</th>
+        <th class="px-4 py-2">Age</th>
+        <th class="px-4 py-2">Chief complaint</th>
+        <th class="px-4 py-2">Flags</th>
+        <th class="px-4 py-2">Arrived</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr class="border-t hover:bg-slate-50">
+        <td class="px-4 py-2">
+          <span class="inline-block w-8 text-center font-bold rounded
+            {% if event.acuity <= 2 %}bg-red-600 text-white{% elif event.acuity == 3 %}bg-yellow-400 text-yellow-900{% else %}bg-green-500 text-white{% endif %}">
+            {{ event.acuity }}
+          </span>
+        </td>
+        <td class="px-4 py-2 font-mono text-xs">{{ event.patient.mrn_encoded }}</td>
+        <td class="px-4 py-2">{{ event.patient.age }}</td>
+        <td class="px-4 py-2">
+          <a href="{% url 'patient_detail' event.id %}" class="text-blue-700 hover:underline">
+            {{ event.chief_complaint|truncatechars:48 }}
+          </a>
+        </td>
+        <td class="px-4 py-2">
+          {% for flag in event.oncologic_emergency_flags %}
+            <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">{{ flag }}</span>
+          {% empty %}<span class="text-slate-300">—</span>{% endfor %}
+        </td>
+        <td class="px-4 py-2 text-slate-500">{{ event.timestamp|date:"H:i" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow p-10 text-center text-slate-500">
+  No patients in the queue yet. <a href="{% url 'nurse_form' %}" class="text-blue-700 hover:underline">Add the first triage</a>.
+</div>
+{% endif %}
+{% endblock %}

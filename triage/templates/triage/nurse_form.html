@@ -1,0 +1,71 @@
+{% extends "triage/base.html" %}
+{% block title %}New triage{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-1">New patient triage</h1>
+<p class="text-slate-500 mb-6">Fill this out at the bedside. The system assigns an acuity and flags possible oncologic emergencies.</p>
+
+<form method="post" class="space-y-6">
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="bg-red-100 text-red-800 px-4 py-2 rounded">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <section class="bg-white rounded-lg shadow p-5">
+    <h2 class="font-semibold text-slate-700 mb-3">Patient</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {% for field in form %}{% if field.name in "mrn,name,age,sex" %}
+        <div>
+          <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors|striptags }}</p>{% endif %}
+        </div>
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+
+  <section class="bg-white rounded-lg shadow p-5">
+    <h2 class="font-semibold text-slate-700 mb-3">Chief complaint</h2>
+    {{ form.chief_complaint }}
+    {% if form.chief_complaint.errors %}<p class="text-red-600 text-xs mt-1">{{ form.chief_complaint.errors|striptags }}</p>{% endif %}
+  </section>
+
+  <section class="bg-white rounded-lg shadow p-5">
+    <h2 class="font-semibold text-slate-700 mb-3">Vitals</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {% for field in form %}{% if field.name in "heart_rate,systolic_bp,diastolic_bp,respiratory_rate,spo2,temperature_c" %}
+        <div>
+          <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors|striptags }}</p>{% endif %}
+        </div>
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+
+  <section class="bg-white rounded-lg shadow p-5">
+    <h2 class="font-semibold text-slate-700 mb-3">Oncology context</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {% for field in form %}{% if field.name in "known_malignancy,on_chemotherapy,days_since_last_cycle,neutropenia_known" %}
+        <div>
+          <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors|striptags }}</p>{% endif %}
+        </div>
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+
+  <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg">
+    Submit triage
+  </button>
+</form>
+
+<style>
+  input[type=text], input[type=number], textarea, select {
+    width: 100%; border: 1px solid #cbd5e1; border-radius: 0.375rem;
+    padding: 0.375rem 0.5rem;
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ER Triage{% endblock %}</title>
+  <!-- Tailwind via CDN: no build step, perfect for teaching. A real deploy would
+       compile Tailwind into a static asset. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+  <header class="bg-slate-900 text-white">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="{% url 'doctor_queue' %}" class="font-semibold tracking-tight">
+        🏥 ER Triage Extractor
+      </a>
+      <nav class="text-sm space-x-4">
+        <a href="{% url 'doctor_queue' %}" class="hover:underline">Doctor queue</a>
+        <a href="{% url 'nurse_form' %}" class="hover:underline">New triage</a>
+      </nav>
+    </div>
+  </header>
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="max-w-5xl mx-auto px-4 py-6 text-xs text-slate-400">
+    CCI Session 11 — teaching app. Not for clinical use.
+  </footer>
+</body>
+</html>

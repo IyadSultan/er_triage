@@ -1,0 +1,13 @@
+# Core
+Django==5.2.*
+gunicorn==23.0.0          # production WSGI server (Render runs this)
+whitenoise==6.8.2         # serve static files without a separate web server
+python-dotenv==1.0.1      # load a local .env in development
+cryptography==44.0.0      # Fernet encryption for patient names
+
+# LLM (optional at runtime — the app degrades gracefully without a key)
+openai==1.59.6
+
+# Optional: only used if you set DATABASE_URL to a Postgres instance on Render
+dj-database-url==2.3.0
+psycopg2-binary==2.9.10
