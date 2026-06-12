@@ -30,8 +30,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --- core -------------------------------------------------------------------
 # A dev SECRET_KEY ships so the app runs immediately. In production Render sets
 # a real one as an environment variable.
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-cci-session-11-dev-key-change-in-production"
+SECRET_KEY = os.environ.get("SECRET_KEY") or (
+    "django-insecure-cci-session-11-dev-key-change-in-production"
 )
 
 DEBUG = _env_bool("DEBUG", default=True)

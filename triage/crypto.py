@@ -27,7 +27,7 @@ from cryptography.fernet import Fernet, InvalidToken
 _MOD = 1 << 31
 _MASK = _MOD - 1
 _PRIME = 1_580_030_173  # odd
-_RANDOM = int(os.environ.get("OPTIMUS_RANDOM", "1163945558")) & _MASK
+_RANDOM = int(os.environ.get("OPTIMUS_RANDOM") or "1163945558") & _MASK
 _INVERSE = pow(_PRIME, -1, _MOD)
 
 
