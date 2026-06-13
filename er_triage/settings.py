@@ -96,11 +96,13 @@ WSGI_APPLICATION = "er_triage.wsgi.application"
 # small Render deployment (point a Render persistent disk at the file). If you
 # would rather use Render's managed Postgres, set DATABASE_URL and dj-database-url
 # will pick it up automatically.
+import dj_database_url
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ.get("SQLITE_PATH", BASE_DIR / "db.sqlite3"),
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
 _database_url = os.environ.get("DATABASE_URL")
 if _database_url:
