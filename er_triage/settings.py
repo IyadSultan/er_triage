@@ -34,7 +34,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY") or (
     "django-insecure-cci-session-11-dev-key-change-in-production"
 )
 
-DEBUG = _env_bool("DEBUG", default=True)
+DEBUG = os.environ.get("DEBUG", "true").lower() != "false"
 
 # ALLOWED_HOSTS: comma-separated env var in production. Render injects the host
 # name as RENDER_EXTERNAL_HOSTNAME, which we add automatically.
