@@ -1,13 +1,3 @@
-# Render blueprint for the ER Triage Extractor.
-#
-# Two ways to deploy on Render:
-#   1. Click "New +" -> "Web Service", connect this repo, and Render reads this file.
-#   2. Or configure the same Build/Start commands by hand in the dashboard.
-#
-# This blueprint uses SQLite on a small persistent disk — the simplest possible
-# setup, and the one Lesson 7 walks through. To use Postgres instead, delete the
-# `disk:` block, add a Render Postgres database, and set DATABASE_URL.
-
 services:
   - type: web
     name: er-triage
@@ -15,23 +5,24 @@ services:
     plan: free
     buildCommand: "./build.sh"
     startCommand: "gunicorn er_triage.wsgi:application"
-    # A persistent disk so the SQLite file survives restarts and deploys.
-    disk:
-      name: triage-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.9"
       - key: SECRET_KEY
-        generateValue: true        # Render generates a strong secret for you
+        generateValue: true
       - key: DEBUG
         value: "false"
-      - key: SQLITE_PATH
-        value: "/var/data/db.sqlite3"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: er-triage-db
+          property: connectionString
       - key: OPENAI_API_KEY
-        sync: false                 # you paste this in the dashboard (kept secret)
+        sync: false
       - key: OPENAI_MODEL
         value: "gpt-4o-mini"
       - key: FERNET_KEY
-        sync: false                 # generate one and paste it in the dashboard
+        sync: false
+
+databases:
+  - name: er-triage-db
+    plan: free
